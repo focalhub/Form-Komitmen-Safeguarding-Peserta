@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Komitmen Safeguarding & Etika Peserta</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        @media print {
+            body * { visibility: hidden; }
+            #printable-area, #printable-area * { visibility: visible; }
+            #printable-area { position: absolute; left: 0; top: 0; width: 100%; }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <header class="bg-brand-900 text-white shadow-md sticky top-0 z-40 no-print">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-lg bg-brand-500 flex items-center justify-center text-white font-bold text-xl shadow">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">Portal Safeguarding Organisasi</h1>
+                    <p class="text-xs text-brand-100">Integritas, Perlindungan & Hak Asasi Peserta</p>
+                </div>
+            </div>
+
+            <nav class="flex items-center space-x-2 sm:space-x-4 text-sm font-medium">
+                <button onclick="switchTab('form')" id="nav-form" class="px-3 py-2 rounded-lg bg-brand-800 text-white transition hover:bg-brand-700 flex items-center gap-2">
+                    <i class="fa-solid fa-file-pen"></i> <span class="hidden sm:inline">Form Komitmen</span>
+                </button>
+                <button onclick="switchTab('report')" id="nav-report" class="px-3 py-2 rounded-lg bg-red-600/90 hover:bg-red-600 text-white transition flex items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation"></i> <span>Laporkan Insiden</span>
+                </button>
+                <button onclick="switchTab('admin')" id="nav-admin" class="px-3 py-2 rounded-lg bg-brand-800 text-white transition hover:bg-brand-700 flex items-center gap-2">
+                    <i class="fa-solid fa-users-gear"></i> <span class="hidden sm:inline">Dashboard Admin</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto w-full px-4 py-8 flex-grow">
+
+        <!-- Toast Notification Container -->
+        <div id="toast-container" class="fixed top-16 right-4 z-50 flex flex-col gap-2 max-w-sm"></div>
+
+        <!-- TAB 1: FORM KOMITMEN PESERTA -->
+        <section id="section-form" class="space-y-6">
+            
+            <!-- Header Card -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 text-center sm:text-left relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-brand-100 rounded-full blur-2xl opacity-60 pointer-events-none"></div>
+                <div class="flex flex-col sm:flex-row items-center gap-4">
+                    <div class="p-4 bg-brand-50 text-brand-700 rounded-2xl shrink-0">
+                        <i class="fa-solid fa-handshake-angle text-4xl"></i>
+                    </div>
+                    <div>
+                        <span class="inline-block px-3 py-1 bg-brand-100 text-brand-800 text-xs font-semibold rounded-full mb-2">Dokumen Etika & Kepatuhan</span>
+                        <h2 class="text-2xl font-bold text-slate-900">Form Komitmen Safeguarding Peserta</h2>
+                        <p class="text-slate-600 text-sm mt-1">
+                            Seluruh peserta wajib membaca, memahami, dan menyetujui lembar komitmen integritas, perlindungan kelompok rentan, serta etika digital sebelum memulai kegiatan organisasi.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Indicator Bar -->
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <div class="flex justify-between text-xs font-medium text-slate-500 mb-2" id="step-indicators">
+                    <span class="text-brand-700 font-bold" id="step-lbl-1">1. Data Peserta</span>
+                    <span id="step-lbl-2">2. Integritas & Perlindungan</span>
+                    <span id="step-lbl-3">3. Anak & Inklusi</span>
+                    <span id="step-lbl-4">4. Digital & Melapor</span>
+                    <span id="step-lbl-5">5. Deklarasi & Tanda Tangan</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="bg-brand-600 h-full w-1/5 transition-all duration-300"></div>
+                </div>
+            </div>
+
+            <form id="safeguarding-form" onsubmit="handleFormSubmit(event)">
+
+                <!-- STEP 1: DATA DIRI & DETAIL KEGIATAN -->
+                <div id="step-1" class="form-step space-y-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h3 class="text-lg font-bold text-slate-800 border-b pb-3 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-user-check text-brand-600"></i> Data Identitas & Kegiatan
+                        </h3>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap <span class="text-red-500">*</span></label>
+                                <input type="text" id="input-nama" required class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition text-sm" placeholder="Contoh: Budi Santoso">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Email / Kontak WhatsApp <span class="text-red-500">*</span></label>
+                                <input type="text" id="input-kontak" required class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition text-sm" placeholder="08123456789 atau email@domain.com">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Peran dalam Kegiatan <span class="text-red-500">*</span></label>
+                                <select id="input-peran" required class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition text-sm">
+                                    <option value="">-- Pilih Peran --</option>
+                                    <option value="Peserta Kegiatan">Peserta Kegiatan</option>
+                                    <option value="Fasilitator / Narasumber">Fasilitator / Narasumber</option>
+                                    <option value="Panitia / Staf Relawan">Panitia / Staf Relawan</option>
+                                    <option value="Mitra Organisasi / Vendor">Mitra Organisasi / Vendor</option>
+                                    <option value="Lainnya">Lainnya</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Nama Kegiatan / Program <span class="text-red-500">*</span></label>
+                                <input type="text" id="input-kegiatan" required class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition text-sm" placeholder="Contoh: Pelatihan Pemberdayaan Inklusif 2026">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Instansi / Organisasi Asal <span class="text-red-500">*</span></label>
+                                <input type="text" id="input-instansi" required class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition text-sm" placeholder="Contoh: Komunitas Inklusi Mandiri">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Tanggal Penyataan <span class="text-red-500">*</span></label>
+                                <input type="date" id="input-tanggal" required class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition text-sm">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 2: SECTION A & B -->
+                <div id="step-2" class="form-step hidden space-y-6">
+                    <!-- Section A -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="flex justify-between items-center border-b pb-3 mb-4">
+                            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-7 h-7 bg-brand-100 text-brand-800 rounded-full inline-flex items-center justify-center text-sm">A</span>
+                                Integritas dan Profesionalisme
+                            </h3>
+                            <button type="button" onclick="selectAllInSection('sec-a')" class="text-xs text-brand-700 font-semibold hover:underline">Centang Semua (Sec A)</button>
+                        </div>
+                        <div class="space-y-4 text-sm text-slate-700" id="sec-a">
+                            <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                                <input type="checkbox" required class="stmt-check mt-1 w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
+                                <span>Saya berkomitmen menjunjung tinggi integritas, tidak melakukan korupsi, penipuan, suap, maupun penyalahgunaan dana dan sumber daya program.</span>
+                            </label>
+                            <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                                <input type="checkbox" required class="stmt-check mt-1 w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
+                                <span>Saya akan menghindari konflik kepentingan yang dapat mempengaruhi objektivitas dan profesionalisme saya.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Section B -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="flex justify-between items-center border-b pb-3 mb-4">
+                            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-7 h-7 bg-brand-100 text-brand-800 rounded-full inline-flex items-center justify-center text-sm">B</span>
+                                Safeguarding & Perlindungan Kelompok Rentan
+                            </h3>
+                            <button type="button" onclick="selectAllInSection('sec-b')" class="text-xs text-brand-700 font-semibold hover:underline">Centang Semua (Sec B)</button>
+                        </div>
+                        <div class="space-y-4 text-sm text-slate-700" id="sec-b">
+                            <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                                <input type="checkbox" required class="stmt-check mt-1 w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
+                                <span>Saya tidak akan melakukan segala bentuk kekerasan, pelecehan seksual, eksploitasi, perundungan, atau perlakuan tidak pantas terhadap siapapun.</span>
+                            </label>
+                            <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                                <input type="checkbox" required class="stmt-check mt-1 w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
+                                <span>Saya berkomitmen menciptakan lingkungan yang aman secara fisik, psikologis, dan sosial bagi seluruh peserta kegiatan.</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: SECTION C & D -->
+                <div id="step-3" class="form-step hidden space-y-6">
+                    <!-- Section C -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="flex justify-between items-center border-b pb-3 mb-4">
+                            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-7 h-7 bg-brand-100 text-brand-800 rounded-full inline-flex items-center justify-center text-sm">C</span>
+                                Komitmen Perlindungan Anak (Child Protection)
+                            </h3>
+                            <button type="button" onclick="selectAllInSection('sec-c')" class="text-xs text-brand-700 font-semibold hover:underline">Centang Semua (Sec C)</button>
+                        </div>
+                        <div class="space-y-4 text-sm text-slate-700" id="sec-c">
+                            <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                                <input type="checkbox" required class="stmt-check mt-1 w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
+                                <span>Saya memahami bahwa anak (di bawah 18 tahun) memiliki hak perlindungan khusus dan akan selalu mengutamakan kepentingan terbaik anak dalam setiap interaksi.</span>
+                            </label>
+                            <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                                <input type="checkbox" required class="stmt-check mt-1 w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
+                                <span>Saya tidak akan melakukan kontak fisik, komunikasi, atau interaksi yang tidak pantas dengan anak, baik secara langsung maupun melalui media digital.</span>
+                            </label>
+                            <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                                <input type="checkbox" required class="stmt-check mt-1 w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
+                                <span>Saya tidak akan mengambil, menyimpan, atau membagikan foto/video anak tanpa persetujuan resmi (informed consent) dari orang tua/wali dan sesuai prosedur organisasi.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Section D -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="flex justify-between items-center border-b pb-3 mb-4">
+                            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-7 h-7 bg-brand-100 text-brand-800 rounded-full inline-flex items-center justify-center text-sm">D</span>
+                                Inklusi & Non-Diskriminasi (OYPMK & Disabilitas)
+                            </h3>
+                            <button type="button" onclick="selectAllInSection('sec-d')" class="text-xs text-brand-700 font-semibold hover:underline">Centang Semua (Sec D)</button>
+                        </div>
+                        <div class="space-y-4 text-sm text-slate-700" id="sec-d">
+                            <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                                <input type="checkbox" required class="stmt-check mt-1 w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
+                                <span>Saya berkomitmen untuk menghormati martabat dan hak OYPMK (Orang Yang Pernah Mengalami Kusta) serta tidak melakukan stigma, stereotip, atau diskriminasi dalam bentuk apapun.</span>
+                            </label>
+                            <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                                <input type="checkbox" required class="stmt-check mt-1 w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
+                                <span>Saya akan memperlakukan orang dengan disabilitas secara setara, menghormati aksesibilitas, serta tidak melakukan diskriminasi, pelecehan, atau eksklusi.</span>
+                            </label>
+                            <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                                <input type="checkbox" required class="stmt-check mt-1 w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
+                                <span>Saya berkomitmen menggunakan bahasa dan perilaku yang inklusif, tidak merendahkan, dan tidak memperkuat stigma terhadap kelompok rentan.</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 4: SECTION E & F -->
+                <div id="step-4" class="form-step hidden space-y-6">
+                    <!-- Section E -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="flex justify-between items-center border-b pb-3 mb-4">
+                            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-7 h-7 bg-brand-100 text-brand-800 rounded-full inline-flex items-center justify-center text-sm">E</span>
+                                Standar Perilaku Digital & Media
+                            </h3>
+                            <button type="button" onclick="selectAllInSection('sec-e')" class="text-xs text-brand-700 font-semibold hover:underline">Centang Semua (Sec E)</button>
+                        </div>
+                        <div class="space-y-4 text-sm text-slate-700" id="sec-e">
+                            <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                                <input type="checkbox" required class="stmt-check mt-1 w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
+                                <span>Saya tidak akan mengambil, menggunakan, atau menyebarkan dokumentasi (foto/video/data) tanpa persetujuan yang sah dan tidak akan menggunakannya untuk tujuan yang merendahkan martabat individu/kelompok.</span>
+                            </label>
+                            <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                                <input type="checkbox" required class="stmt-check mt-1 w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
+                                <span>Saya akan menjaga kerahasiaan data pribadi dan sensitif, khususnya terkait anak, OYPMK, dan orang dengan disabilitas.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Section F -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="flex justify-between items-center border-b pb-3 mb-4">
+                            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                                <span class="w-7 h-7 bg-brand-100 text-brand-800 rounded-full inline-flex items-center justify-center text-sm">F</span>
+                                Kewajiban Melapor
+                            </h3>
+                            <button type="button" onclick="selectAllInSection('sec-f')" class="text-xs text-brand-700 font-semibold hover:underline">Centang Semua (Sec F)</button>
+                        </div>
+                        <div class="space-y-4 text-sm text-slate-700" id="sec-f">
+                            <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                                <input type="checkbox" required class="stmt-check mt-1 w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
+                                <span>Saya berkomitmen untuk segera melaporkan setiap dugaan atau kejadian pelanggaran kode etik dan safeguarding melalui mekanisme pengaduan resmi NLR Indonesia / Organisasi Penyelenggara.</span>
+                            </label>
+                            <label class="flex items-start gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                                <input type="checkbox" required class="stmt-check mt-1 w-4 h-4 text-brand-600 rounded border-slate-300 focus:ring-brand-500">
+                                <span>Saya memahami bahwa pelapor dilindungi dan laporan akan ditangani secara serius, rahasia, dan profesional.</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 5: TAMBAHAN ORGANISASI & TANDA TANGAN DIGITAL -->
+                <div id="step-5" class="form-step hidden space-y-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h3 class="text-lg font-bold text-slate-900 border-b pb-3 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-file-contract text-brand-600"></i> Deklarasi Tambahan Organisasi
+                        </h3>
+                        
+                        <!-- Added Enhancement 1: Conflict of Interest statement -->
+                        <div class="mb-5">
+                            <label class="block text-sm font-semibold text-slate-800 mb-1">
+                                Deklarasi Potensi Konflik Kepentingan
+                            </label>
+                            <p class="text-xs text-slate-500 mb-2">Apakah Anda memiliki hubungan keluarga, finansial, atau ikatan profesional lain yang berpotensi menimbulkan konflik kepentingan dalam kegiatan ini?</p>
+                            <div class="flex gap-4 text-sm">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="radio" name="coi-radio" value="Tidak Ada" checked class="text-brand-600 focus:ring-brand-500">
+                                    <span>Tidak Ada</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="radio" name="coi-radio" value="Ada" class="text-brand-600 focus:ring-brand-500" onchange="toggleCoiNote(true)">
+                                    <span>Ada (Sebutkan)</span>
+                                </label>
+                            </div>
+                            <input type="text" id="coi-note" class="hidden mt-2 w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-brand-500" placeholder="Jelaskan potensi konflik kepentingan...">
+                        </div>
+
+                        <!-- Added Enhancement 2: Data Protection & Consent -->
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 mb-6 text-xs text-slate-600 space-y-2">
+                            <p class="font-semibold text-slate-800 flex items-center gap-1">
+                                <i class="fa-solid fa-user-shield text-brand-600"></i> Persetujuan Pengolahan Data Pribadi (Privacy Consent)
+                            </p>
+                            <p>
+                                Data pribadi Anda akan disimpan dan diproses secara aman oleh Organisasi sesuai Regulasi Perlindungan Data Pribadi untuk keperluan administrasi kegiatan, verifikasi safeguarding, dan audit kepatuhan.
+                            </p>
+                            <label class="flex items-center gap-2 mt-2 font-medium text-slate-700 cursor-pointer">
+                                <input type="checkbox" required id="privacy-consent" class="w-4 h-4 text-brand-600 rounded border-slate-300">
+                                <span>Saya menyetujui pengolahan data pribadi untuk tujuan Safeguarding ini.</span>
+                            </label>
+                        </div>
+
+                        <!-- Digital Signature Canvas -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-sm font-semibold text-slate-800">
+                                    Tanda Tangan Digital Peserta <span class="text-red-500">*</span>
+                                </label>
+                                <button type="button" onclick="clearSignature()" class="text-xs text-red-600 hover:text-red-800 font-medium">
+                                    <i class="fa-solid fa-rotate-right"></i> Bersihkan Tanda Tangan
+                                </button>
+                            </div>
+                            <div class="border-2 border-dashed border-slate-300 rounded-xl bg-slate-50 relative overflow-hidden">
+                                <canvas id="signature-pad" class="w-full h-44 touch-none cursor-crosshair"></canvas>
+                                <span class="absolute bottom-2 right-3 text-xs text-slate-400 pointer-events-none">Goreskan tanda tangan di atas kotak ini</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1">Dengan menandatangani lembar ini, Anda menyatakan bahwa seluruh informasi dan persetujuan di atas adalah sah dan benar.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="flex justify-between items-center mt-6 pt-4 border-t border-slate-200">
+                    <button type="button" id="btn-prev" onclick="changeStep(-1)" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-semibold text-sm hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition">
+                        <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
+                    </button>
+
+                    <button type="button" id="btn-next" onclick="changeStep(1)" class="px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-md transition flex items-center gap-2">
+                        <span>Lanjut</span> <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+
+                    <button type="submit" id="btn-submit" class="hidden px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-md transition flex items-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> <span>Kirim Komitmen</span>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- TAB 2: MEKANISME LAPORKAN INSIDEN (WHISTLEBLOWING) -->
+        <section id="section-report" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-red-200 relative">
+                <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-red-100 text-red-600 flex items-center justify-center text-2xl">
+                        <i class="fa-solid fa-shield-cat"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900">Mekanisme Pengaduan Safeguarding (Kerahasiaan Dijamin)</h2>
+                        <p class="text-xs text-slate-500">NLR Indonesia & Organisasi menjamin perlindungan pelapor (Whistleblower Protection)</p>
+                    </div>
+                </div>
+
+                <form id="incident-report-form" onsubmit="handleIncidentSubmit(event)" class="space-y-4">
+                    <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl text-xs text-amber-800 flex items-start gap-2">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-600 mt-0.5 text-sm"></i>
+                        <span>Jika Anda mengalami, melihat, atau mencurigai adanya tindakan pelecehan, diskriminasi, atau kekerasan, harap laporkan di sini. Identitas Anda dapat dirahasiakan jika diinginkan.</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Nama Pelapor (Boleh Anonim)</label>
+                            <input type="text" id="report-nama" class="w-full px-4 py-2 text-sm border border-slate-300 rounded-lg" placeholder="Isi 'Anonim' jika ingin merahasiakan nama">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Kontak yang Dapat Dihubungi (Optional)</label>
+                            <input type="text" id="report-kontak" class="w-full px-4 py-2 text-sm border border-slate-300 rounded-lg" placeholder="Email / Nomor WhatsApp untuk tindak lanjut">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Kategori Pelanggaran <span class="text-red-500">*</span></label>
+                        <select id="report-kategori" required class="w-full px-4 py-2 text-sm border border-slate-300 rounded-lg">
+                            <option value="">-- Pilih Kategori --</option>
+                            <option value="Kekerasan / Pelecehan Seksual">Kekerasan / Pelecehan Seksual</option>
+                            <option value="Perundungan / Bullying / Intimidasi">Perundungan / Bullying / Intimidasi</option>
+                            <option value="Diskriminasi Disabilitas / OYPMK">Diskriminasi Disabilitas / OYPMK</option>
+                            <option value="Pelanggaran Perlindungan Anak">Pelanggaran Perlindungan Anak</option>
+                            <option value="Penyalahgunaan Data / Foto Tanpa Izin">Penyalahgunaan Data / Foto Tanpa Izin</option>
+                            <option value="Korupsi / Fraud / Konflik Kepentingan">Korupsi / Fraud / Konflik Kepentingan</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Deskripsi Kejadian / Kronologi <span class="text-red-500">*</span></label>
+                        <textarea id="report-deskripsi" rows="4" required class="w-full px-4 py-2 text-sm border border-slate-300 rounded-lg" placeholder="Jelaskan secara singkat lokasi, tanggal kejadian, dan kronologi..."></textarea>
+                    </div>
+
+                    <button type="submit" class="px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold text-sm rounded-xl shadow transition flex items-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> Kirim Laporan Pengaduan
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- TAB 3: DASHBOARD ADMIN & REKAP SUBMISSI -->
+        <section id="section-admin" class="hidden space-y-6">
+
+            <!-- ADMIN LOGIN CONTAINER (Displayed when NOT logged in) -->
+            <div id="admin-login-card" class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200 max-w-md mx-auto my-8">
+                <div class="text-center mb-6">
+                    <div class="w-14 h-14 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl shadow-inner">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-900">Autentikasi Administrator</h2>
+                    <p class="text-xs text-slate-500 mt-1">Masuk untuk mengakses rekapitulasi komitmen & laporan pengaduan</p>
+                </div>
+
+                <form id="admin-login-form" onsubmit="handleAdminLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Username Admin</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                                <i class="fa-solid fa-user"></i>
+                            </span>
+                            <input type="text" id="admin-username" required class="w-full pl-9 pr-4 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition" placeholder="Username">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                                <i class="fa-solid fa-key"></i>
+                            </span>
+                            <input type="password" id="admin-password" required class="w-full pl-9 pr-4 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition" placeholder="Kata sandi">
+                        </div>
+                    </div>
+
+                    <div id="login-error-msg" class="hidden text-xs text-red-600 bg-red-50 border border-red-200 p-2.5 rounded-lg flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>Username atau password salah!</span>
+                    </div>
+
+                    <button type="submit" class="w-full py-2.5 bg-brand-700 hover:bg-brand-800 text-white text-sm font-semibold rounded-xl shadow transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-right-to-bracket"></i> Masuk Admin
+                    </button>
+                </form>
+
+                <div class="mt-6 pt-4 border-t border-slate-100 text-center">
+                    <div class="bg-amber-50 border border-amber-200 rounded-lg p-2.5 text-xs text-amber-800">
+                        <p class="font-semibold mb-0.5"><i class="fa-solid fa-key text-amber-600 mr-1"></i> Kredensial Admin Default:</p>
+                        <p class="font-mono">Username: <strong class="text-slate-900">admin</strong> | Password: <strong class="text-slate-900">admin123</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN DASHBOARD CONTAINER (Displayed when Logged In) -->
+            <div id="admin-dashboard-content" class="hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="flex flex-wrap justify-between items-center gap-4 border-b pb-4 mb-4">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h2 class="text-xl font-bold text-slate-900">Rekapitulasi Komitmen Safeguarding</h2>
+                                <span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 text-xs font-semibold rounded-full flex items-center gap-1">
+                                    <i class="fa-solid fa-lock"></i> Terautentikasi
+                                </span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1">Daftar peserta yang telah menandatangani lembar komitmen digital</p>
+                        </div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <button onclick="exportToCSV()" class="px-3 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold rounded-lg shadow transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-file-excel"></i> Ekspor CSV
+                            </button>
+                            <button onclick="clearAllSubmissions()" class="px-3 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-semibold rounded-lg transition">
+                                Reset Data
+                            </button>
+                            <button onclick="handleAdminLogout()" class="px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-lg shadow transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-right-from-bracket"></i> Keluar Admin
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 mb-4">
+                        <input type="text" id="admin-search" oninput="renderAdminTable()" placeholder="Cari nama, kegiatan, atau instansi..." class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-500">
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-slate-600">
+                            <thead class="bg-slate-100 text-slate-700 font-semibold uppercase text-xs">
+                                <tr>
+                                    <th class="p-3">Waktu</th>
+                                    <th class="p-3">Nama Peserta</th>
+                                    <th class="p-3">Peran</th>
+                                    <th class="p-3">Kegiatan</th>
+                                    <th class="p-3">Instansi</th>
+                                    <th class="p-3 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-table-body" class="divide-y divide-slate-100">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Incident Reports Panel for Admin -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-red-200">
+                    <div class="flex justify-between items-center border-b pb-4 mb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                                <i class="fa-solid fa-triangle-exclamation text-red-600"></i> Rekap Laporan Insiden (Whistleblowing)
+                            </h3>
+                            <p class="text-xs text-slate-500">Laporan kerahasiaan pengaduan yang masuk dari peserta</p>
+                        </div>
+                        <button onclick="clearAllIncidents()" class="px-3 py-1.5 bg-red-100 text-red-700 hover:bg-red-200 text-xs font-semibold rounded-lg transition">
+                            Hapus Laporan
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-slate-600">
+                            <thead class="bg-red-50 text-red-800 font-semibold uppercase text-xs">
+                                <tr>
+                                    <th class="p-3">Waktu</th>
+                                    <th class="p-3">Pelapor</th>
+                                    <th class="p-3">Kontak</th>
+                                    <th class="p-3">Kategori Insiden</th>
+                                    <th class="p-3">Deskripsi / Kronologi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-incidents-body" class="divide-y divide-slate-100">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- SUCCESS RECEIPT MODAL (PRINTABLE) -->
+    <div id="receipt-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl space-y-6">
+            <div class="flex justify-between items-center border-b pb-3 no-print">
+                <h3 class="text-lg font-bold text-emerald-700 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-check"></i> Komitmen Safeguarding Terverifikasi
+                </h3>
+                <button onclick="closeReceiptModal()" class="text-slate-400 hover:text-slate-600 text-xl font-bold">&times;</button>
+            </div>
+
+            <div id="printable-area" class="space-y-4 p-4 border border-slate-200 rounded-xl bg-slate-50">
+                <div class="text-center border-b pb-4">
+                    <div class="w-12 h-12 bg-brand-700 text-white rounded-full flex items-center justify-center mx-auto mb-2 text-xl font-bold">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-900 uppercase tracking-wide">Tanda Terima Komitmen Safeguarding</h2>
+                    <p class="text-xs text-slate-500">Nomor Registrasi: <span id="rec-id" class="font-mono font-bold text-slate-700"></span></p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 text-xs border-b pb-3 text-slate-700">
+                    <div><strong>Nama:</strong> <span id="rec-nama"></span></div>
+                    <div><strong>Kontak:</strong> <span id="rec-kontak"></span></div>
+                    <div><strong>Peran:</strong> <span id="rec-peran"></span></div>
+                    <div><strong>Kegiatan:</strong> <span id="rec-kegiatan"></span></div>
+                    <div><strong>Instansi:</strong> <span id="rec-instansi"></span></div>
+                    <div><strong>Tanggal:</strong> <span id="rec-tanggal"></span></div>
+                </div>
+
+                <div class="text-xs text-slate-600 space-y-1">
+                    <p class="font-semibold text-slate-800">Status Pernyataan:</p>
+                    <p class="text-emerald-700 font-medium">✓ Menyetujui Seluruh Poin Integritas & Safeguarding (Bagian A - F)</p>
+                    <p>✓ Berkomitmen terhadap perlindungan anak, inklusi disabilitas, & OYPMK.</p>
+                    <p>✓ Menyetujui Kebijakan Kerahasiaan Data & Pengaduan Resmi Organisasi.</p>
+                </div>
+
+                <div class="pt-4 border-t flex justify-between items-end">
+                    <div class="text-xs text-slate-400">
+                        Diproses secara digital oleh<br>
+                        <strong class="text-slate-600">Safeguarding System NLR / Organisasi</strong>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xs font-medium text-slate-500 mb-1">Tanda Tangan Peserta:</p>
+                        <img id="rec-signature" src="" alt="Tanda Tangan" class="h-16 max-w-[180px] object-contain mx-auto border border-slate-200 rounded bg-white p-1">
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 no-print">
+                <button onclick="window.print()" class="px-4 py-2 bg-brand-700 text-white text-xs font-semibold rounded-lg hover:bg-brand-800 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-print"></i> Cetak / Simpan PDF
+                </button>
+                <button onclick="closeReceiptModal()" class="px-4 py-2 bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg hover:bg-slate-300 transition">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500 no-print">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <p>&copy; 2026 Safeguarding & Inclusion Portal. Menjunjung Tinggi Integritas & Perlindungan Kelompok Rentan.</p>
+            <p class="text-slate-400">Sesuai Standar Kode Etik NLR Indonesia & Perlindungan Anak</p>
+        </div>
+    </footer>
+
+    <script>
+        // Global State variables
+        let currentStep = 1;
+        const totalSteps = 5;
+        let isDrawing = false;
+        let canvas, ctx;
+        let isAdminLoggedIn = sessionStorage.getItem('isAdminLoggedIn') === 'true';
+
+        // Admin Credentials Configuration
+        const ADMIN_CREDENTIALS = {
+            username: 'admin',
+            password: 'admin123'
+        };
+
+        // Initialize App on DOM Load
+        window.onload = function() {
+            // Set default date to today
+            document.getElementById('input-tanggal').value = new Date().toISOString().split('T')[0];
+
+            // Initialize Signature Canvas
+            initSignatureCanvas();
+            
+            // Render initial state
+            updateStepView();
+            updateAdminViewState();
+        };
+
+        // Tab Switching
+        function switchTab(tabName) {
+            document.getElementById('section-form').classList.add('hidden');
+            document.getElementById('section-report').classList.add('hidden');
+            document.getElementById('section-admin').classList.add('hidden');
+
+            document.getElementById('nav-form').className = "px-3 py-2 rounded-lg bg-brand-800 text-white transition hover:bg-brand-700 flex items-center gap-2";
+            document.getElementById('nav-report').className = "px-3 py-2 rounded-lg bg-red-600/90 hover:bg-red-600 text-white transition flex items-center gap-2";
+            document.getElementById('nav-admin').className = "px-3 py-2 rounded-lg bg-brand-800 text-white transition hover:bg-brand-700 flex items-center gap-2";
+
+            if (tabName === 'form') {
+                document.getElementById('section-form').classList.remove('hidden');
+                document.getElementById('nav-form').classList.add('bg-brand-600');
+            } else if (tabName === 'report') {
+                document.getElementById('section-report').classList.remove('hidden');
+                document.getElementById('nav-report').classList.add('bg-red-700');
+            } else if (tabName === 'admin') {
+                document.getElementById('section-admin').classList.remove('hidden');
+                document.getElementById('nav-admin').classList.add('bg-brand-600');
+                updateAdminViewState();
+            }
+        }
+
+        // Admin Auth Handlers
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const userIn = document.getElementById('admin-username').value.trim();
+            const passIn = document.getElementById('admin-password').value;
+            const errorMsg = document.getElementById('login-error-msg');
+
+            if (userIn === ADMIN_CREDENTIALS.username && passIn === ADMIN_CREDENTIALS.password) {
+                isAdminLoggedIn = true;
+                sessionStorage.setItem('isAdminLoggedIn', 'true');
+                errorMsg.classList.add('hidden');
+                document.getElementById('admin-login-form').reset();
+                updateAdminViewState();
+                showToast('Login Admin berhasil!', 'success');
+            } else {
+                errorMsg.classList.remove('hidden');
+            }
+        }
+
+        function handleAdminLogout() {
+            isAdminLoggedIn = false;
+            sessionStorage.removeItem('isAdminLoggedIn');
+            updateAdminViewState();
+            showToast('Anda telah keluar dari mode Admin.', 'info');
+        }
+
+        function updateAdminViewState() {
+            const loginCard = document.getElementById('admin-login-card');
+            const dashboardContent = document.getElementById('admin-dashboard-content');
+
+            if (!loginCard || !dashboardContent) return;
+
+            if (isAdminLoggedIn) {
+                loginCard.classList.add('hidden');
+                dashboardContent.classList.remove('hidden');
+                renderAdminTable();
+                renderAdminIncidents();
+            } else {
+                loginCard.classList.remove('hidden');
+                dashboardContent.classList.add('hidden');
+            }
+        }
+
+        // Multi-Step Navigation
+        function changeStep(delta) {
+            if (delta === 1 && !validateCurrentStep()) {
+                return;
+            }
+
+            currentStep = Math.max(1, Math.min(totalSteps, currentStep + delta));
+            updateStepView();
+        }
+
+        function updateStepView() {
+            // Hide all steps
+            for (let i = 1; i <= totalSteps; i++) {
+                const el = document.getElementById(`step-${i}`);
+                if (el) el.classList.add('hidden');
+
+                const lbl = document.getElementById(`step-lbl-${i}`);
+                if (lbl) {
+                    if (i === currentStep) {
+                        lbl.className = "text-brand-700 font-bold";
+                    } else if (i < currentStep) {
+                        lbl.className = "text-emerald-600 font-semibold";
+                    } else {
+                        lbl.className = "text-slate-400";
+                    }
+                }
+            }
+
+            // Show current step
+            document.getElementById(`step-${currentStep}`).classList.remove('hidden');
+
+            // Resize canvas when step 5 becomes visible so signature pad functions properly
+            if (currentStep === 5) {
+                setTimeout(resizeCanvas, 50);
+            }
+
+            // Update Progress Bar Width
+            const progressPercent = (currentStep / totalSteps) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+            // Buttons state
+            document.getElementById('btn-prev').disabled = (currentStep === 1);
+            if (currentStep === totalSteps) {
+                document.getElementById('btn-next').classList.add('hidden');
+                document.getElementById('btn-submit').classList.remove('hidden');
+            } else {
+                document.getElementById('btn-next').classList.remove('hidden');
+                document.getElementById('btn-submit').classList.add('hidden');
+            }
+        }
+
+        function validateCurrentStep() {
+            if (currentStep === 1) {
+                const nama = document.getElementById('input-nama').value.trim();
+                const kontak = document.getElementById('input-kontak').value.trim();
+                const peran = document.getElementById('input-peran').value;
+                const kegiatan = document.getElementById('input-kegiatan').value.trim();
+                const instansi = document.getElementById('input-instansi').value.trim();
+
+                if (!nama || !kontak || !peran || !kegiatan || !instansi) {
+                    showToast('Harap isi semua kolom identitas wajib.', 'error');
+                    return false;
+                }
+            } else if (currentStep >= 2 && currentStep <= 4) {
+                const currentContainer = document.getElementById(`step-${currentStep}`);
+                const checkboxes = currentContainer.querySelectorAll('input[type="checkbox"]');
+                let allChecked = true;
+
+                checkboxes.forEach(cb => {
+                    if (!cb.checked) allChecked = false;
+                });
+
+                if (!allChecked) {
+                    showToast('Anda harus menyetujui seluruh pernyataan komitmen di langkah ini.', 'error');
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function selectAllInSection(secId) {
+            const container = document.getElementById(secId);
+            if (container) {
+                const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(cb => cb.checked = true);
+                showToast('Semua poin pada bagian ini telah dicentang.', 'success');
+            }
+        }
+
+        function toggleCoiNote(show) {
+            const noteInput = document.getElementById('coi-note');
+            if (show) {
+                noteInput.classList.remove('hidden');
+                noteInput.required = true;
+            } else {
+                noteInput.classList.add('hidden');
+                noteInput.required = false;
+            }
+        }
+
+        function initSignatureCanvas() {
+            canvas = document.getElementById('signature-pad');
+            if (!canvas) return;
+
+            ctx = canvas.getContext('2d');
+
+            window.addEventListener('resize', resizeCanvas);
+
+            // Mouse Events (Laptop / Desktop)
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseleave', stopDrawing);
+
+            // Touch Events for Mobile / Tablet
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                isDrawing = true;
+                ctx.beginPath();
+                ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+            });
+
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                if (!isDrawing) return;
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                ctx.lineWidth = 2.5;
+                ctx.lineCap = 'round';
+                ctx.strokeStyle = '#0f766e';
+                ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+                ctx.stroke();
+            });
+
+            canvas.addEventListener('touchend', () => isDrawing = false);
+        }
+
+        function resizeCanvas() {
+            if (!canvas) return;
+            const rect = canvas.getBoundingClientRect();
+            // Prevent setting canvas size to 0 if step is hidden
+            if (rect.width === 0 || rect.height === 0) return;
+
+            if (canvas.width !== Math.floor(rect.width) || canvas.height !== Math.floor(rect.height)) {
+                canvas.width = rect.width;
+                canvas.height = rect.height;
+                clearSignature();
+            }
+        }
+
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            ctx.beginPath();
+            const pos = getMousePos(e);
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const pos = getMousePos(e);
+            ctx.lineWidth = 2.5;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#0f766e';
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function clearSignature() {
+            if (!ctx || !canvas) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function isCanvasBlank(c) {
+            if (!c || c.width === 0 || c.height === 0) return true;
+            const blank = document.createElement('canvas');
+            blank.width = c.width;
+            blank.height = c.height;
+            return c.toDataURL() === blank.toDataURL();
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+
+            if (!validateCurrentStep()) return;
+
+            const privacyConsent = document.getElementById('privacy-consent').checked;
+            if (!privacyConsent) {
+                showToast('Persetujuan Pengolahan Data wajib dicentang.', 'error');
+                return;
+            }
+
+            if (isCanvasBlank(canvas)) {
+                showToast('Harap berikan tanda tangan digital Anda sebelum mengirim.', 'error');
+                return;
+            }
+
+            const signatureData = canvas.toDataURL('image/png');
+            const regId = 'SG-' + Math.floor(100000 + Math.random() * 900000);
+
+            const record = {
+                id: regId,
+                timestamp: new Date().toLocaleString('id-ID'),
+                nama: document.getElementById('input-nama').value.trim(),
+                kontak: document.getElementById('input-kontak').value.trim(),
+                peran: document.getElementById('input-peran').value,
+                kegiatan: document.getElementById('input-kegiatan').value.trim(),
+                instansi: document.getElementById('input-instansi').value.trim(),
+                tanggal: document.getElementById('input-tanggal').value,
+                signature: signatureData
+            };
+
+            // Save to LocalStorage
+            let existing = JSON.parse(localStorage.getItem('safeguarding_submissions') || '[]');
+            existing.push(record);
+            localStorage.setItem('safeguarding_submissions', JSON.stringify(existing));
+
+            // Populate Modal Receipt
+            document.getElementById('rec-id').innerText = record.id;
+            document.getElementById('rec-nama').innerText = record.nama;
+            document.getElementById('rec-kontak').innerText = record.kontak;
+            document.getElementById('rec-peran').innerText = record.peran;
+            document.getElementById('rec-kegiatan').innerText = record.kegiatan;
+            document.getElementById('rec-instansi').innerText = record.instansi;
+            document.getElementById('rec-tanggal').innerText = record.tanggal;
+            document.getElementById('rec-signature').src = record.signature;
+
+            // Show Success Modal
+            document.getElementById('receipt-modal').classList.remove('hidden');
+
+            // Reset Form
+            document.getElementById('safeguarding-form').reset();
+            clearSignature();
+            currentStep = 1;
+            updateStepView();
+
+            showToast('Form komitmen berhasil dikirim!', 'success');
+        }
+
+        function closeReceiptModal() {
+            document.getElementById('receipt-modal').classList.add('hidden');
+        }
+
+        function handleIncidentSubmit(e) {
+            e.preventDefault();
+
+            const nama = document.getElementById('report-nama').value.trim() || 'Anonim';
+            const kontak = document.getElementById('report-kontak').value.trim() || '-';
+            const kategori = document.getElementById('report-kategori').value;
+            const deskripsi = document.getElementById('report-deskripsi').value.trim();
+
+            const incidentRecord = {
+                id: 'INC-' + Date.now(),
+                timestamp: new Date().toLocaleString('id-ID'),
+                nama,
+                kontak,
+                kategori,
+                deskripsi
+            };
+
+            let incidents = JSON.parse(localStorage.getItem('safeguarding_incidents') || '[]');
+            incidents.push(incidentRecord);
+            localStorage.setItem('safeguarding_incidents', JSON.stringify(incidents));
+
+            document.getElementById('incident-report-form').reset();
+            showToast('Laporan pengaduan berhasil terkirim dan bersifat rahasia.', 'success');
+        }
+
+        // Admin Table Functions
+        function renderAdminTable() {
+            if (!isAdminLoggedIn) return;
+            const tbody = document.getElementById('admin-table-body');
+            if (!tbody) return;
+
+            const searchQuery = (document.getElementById('admin-search')?.value || '').toLowerCase();
+            const records = JSON.parse(localStorage.getItem('safeguarding_submissions') || '[]');
+
+            tbody.innerHTML = '';
+
+            const filtered = records.filter(r => 
+                r.nama.toLowerCase().includes(searchQuery) ||
+                r.kegiatan.toLowerCase().includes(searchQuery) ||
+                r.instansi.toLowerCase().includes(searchQuery)
+            );
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-400">Belum ada data komitmen yang tersimpan.</td></tr>`;
+                return;
+            }
+
+            filtered.reverse().forEach(r => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-slate-100 hover:bg-slate-50";
+                tr.innerHTML = `
+                    <td class="p-3 text-xs text-slate-500">${r.timestamp}</td>
+                    <td class="p-3 font-semibold text-slate-800">${escapeHtml(r.nama)}</td>
+                    <td class="p-3">${escapeHtml(r.peran)}</td>
+                    <td class="p-3">${escapeHtml(r.kegiatan)}</td>
+                    <td class="p-3">${escapeHtml(r.instansi)}</td>
+                    <td class="p-3 text-center">
+                        <button onclick="previewRecord('${r.id}')" class="text-brand-600 hover:text-brand-800 text-xs font-semibold px-2 py-1 bg-brand-50 rounded">
+                            <i class="fa-solid fa-eye"></i> Liha Bukti
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderAdminIncidents() {
+            if (!isAdminLoggedIn) return;
+            const tbody = document.getElementById('admin-incidents-body');
+            if (!tbody) return;
+
+            const incidents = JSON.parse(localStorage.getItem('safeguarding_incidents') || '[]');
+            tbody.innerHTML = '';
+
+            if (incidents.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-400">Tidak ada laporan insiden / pengaduan.</td></tr>`;
+                return;
+            }
+
+            incidents.reverse().forEach(inc => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-slate-100 hover:bg-red-50/50";
+                tr.innerHTML = `
+                    <td class="p-3 text-xs text-slate-500">${inc.timestamp}</td>
+                    <td class="p-3 font-semibold text-slate-800">${escapeHtml(inc.nama)}</td>
+                    <td class="p-3 text-xs">${escapeHtml(inc.kontak)}</td>
+                    <td class="p-3"><span class="px-2 py-0.5 bg-red-100 text-red-700 rounded text-xs font-semibold">${escapeHtml(inc.kategori)}</span></td>
+                    <td class="p-3 text-xs text-slate-700 max-w-xs truncate">${escapeHtml(inc.deskripsi)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function clearAllIncidents() {
+            if (!isAdminLoggedIn) return;
+            if (confirm('Apakah Anda yakin ingin menghapus seluruh rekap laporan pengaduan?')) {
+                localStorage.removeItem('safeguarding_incidents');
+                renderAdminIncidents();
+                showToast('Laporan pengaduan berhasil dibersihkan.', 'success');
+            }
+        }
+
+        function previewRecord(id) {
+            const records = JSON.parse(localStorage.getItem('safeguarding_submissions') || '[]');
+            const record = records.find(r => r.id === id);
+            if (!record) return;
+
+            document.getElementById('rec-id').innerText = record.id;
+            document.getElementById('rec-nama').innerText = record.nama;
+            document.getElementById('rec-kontak').innerText = record.kontak;
+            document.getElementById('rec-peran').innerText = record.peran;
+            document.getElementById('rec-kegiatan').innerText = record.kegiatan;
+            document.getElementById('rec-instansi').innerText = record.instansi;
+            document.getElementById('rec-tanggal').innerText = record.tanggal;
+            document.getElementById('rec-signature').src = record.signature;
+
+            document.getElementById('receipt-modal').classList.remove('hidden');
+        }
+
+        function exportToCSV() {
+            const records = JSON.parse(localStorage.getItem('safeguarding_submissions') || '[]');
+            if (records.length === 0) {
+                showToast('Tidak ada data untuk diekspor.', 'error');
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,ID,Waktu,Nama,Kontak,Peran,Kegiatan,Instansi,Tanggal\n";
+            records.forEach(r => {
+                csvContent += `"${r.id}","${r.timestamp}","${r.nama}","${r.kontak}","${r.peran}","${r.kegiatan}","${r.instansi}","${r.tanggal}"\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Rekap_Safeguarding_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function clearAllSubmissions() {
+            if (confirm('Apakah Anda yakin ingin menghapus seluruh data rekapitulasi komitmen?')) {
+                localStorage.removeItem('safeguarding_submissions');
+                renderAdminTable();
+                showToast('Data berhasil dibersihkan.', 'success');
+            }
+        }
+
+        // Toast Notification System
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const bgColor = type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-red-600' : 'bg-slate-800';
+            const icon = type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-triangle-exclamation' : 'fa-info-circle';
+
+            toast.className = `${bgColor} text-white text-xs px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0`;
+            toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        function escapeHtml(text) {
+            return String(text).replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+            });
+        }
+    </script>
+</body>
+</html>
